@@ -1,0 +1,363 @@
+<title data-keep>Programme-DTC</title>
+<meta data-keep name="claude:viewport-fit-sides" content="cover">
+<link data-keep rel="preconnect" href="https://fonts.googleapis.com">
+<link data-keep rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap">
+<style data-keep id="app-style">
+/* Layout: one centred column; summary first, then "check my contribution", then the full list; the organiser's entry panel sits last. */
+:root{
+  --bg:#F2F5F3; --surface:#FFFFFF; --ink:#13241D; --muted:#5B6B63; --line:#D8E0DB;
+  --accent:#0E6B4D; --accent-ink:#FFFFFF; --accent-soft:#DCEEE6;
+  --warm:#C8641B; --warm-soft:#F8E6D6;
+  --ok:#137A4B; --ok-soft:#D8F0E3; --mid:#9A6A00; --mid-soft:#F6EBCB; --zero:#6B7570; --zero-soft:#E6EAE8;
+  --err:#B3261E; --err-soft:#F9DEDC;
+  --display:"Sora","Segoe UI",system-ui,sans-serif; --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1613; --surface:#16211D; --ink:#E6EEEA; --muted:#9AAAA2; --line:#2A3833;
+  --accent:#4CC497; --accent-ink:#0B1A14; --accent-soft:#183A2E;
+  --warm:#F0A060; --warm-soft:#3A2717;
+  --ok:#5BD49A; --ok-soft:#173828; --mid:#E8C060; --mid-soft:#3A3016; --zero:#A3AEA9; --zero-soft:#24302C;
+  --err:#F2B8B5; --err-soft:#4A1C1A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1613; --surface:#16211D; --ink:#E6EEEA; --muted:#9AAAA2; --line:#2A3833;
+  --accent:#4CC497; --accent-ink:#0B1A14; --accent-soft:#183A2E;
+  --warm:#F0A060; --warm-soft:#3A2717;
+  --ok:#5BD49A; --ok-soft:#173828; --mid:#E8C060; --mid-soft:#3A3016; --zero:#A3AEA9; --zero-soft:#24302C;
+  --err:#F2B8B5; --err-soft:#4A1C1A; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(1.7rem,4.5vw,2.3rem);line-height:1.15}
+h2{font-size:1.2rem}
+h3{font-size:1rem}
+p{margin:0}
+.eyebrow{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--warm)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+header{display:grid;gap:10px}
+.event{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;color:var(--muted)}
+.countdown{display:inline-flex;align-items:baseline;gap:0;background:var(--warm-soft);color:var(--warm);border-radius:999px;padding:4px 12px;font-weight:600}
+.countdown b{font-family:var(--display);font-size:1.05rem}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:2px;min-width:0}
+.tile .k{font-size:.78rem;color:var(--muted)}
+.tile .v{font-family:var(--display);font-size:1.35rem;font-weight:700}
+.tile .s{font-size:.8rem;color:var(--muted)}
+.bar{height:8px;background:var(--zero-soft);border-radius:999px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:inherit}
+.bar.big{height:12px}
+section{display:grid;gap:14px}
+.lookup{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:14px}
+label{font-size:.85rem;font-weight:500}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;box-sizing:border-box;min-width:0}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.search{font-size:1.05rem;padding:13px 14px}
+.cards{display:grid;gap:12px}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px;background:var(--surface);min-width:0}
+.card-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center}
+.pill{font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.pill.solde{background:var(--ok-soft);color:var(--ok)}
+.pill.cours{background:var(--mid-soft);color:var(--mid)}
+.pill.zero{background:var(--zero-soft);color:var(--zero)}
+.figures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.figures div{display:grid}
+.figures .k{font-size:.75rem;color:var(--muted)}
+.figures .v{font-weight:600}
+.hist{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--line)}
+.hist li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.hist li:last-child{border-bottom:0}
+.hint{font-size:.9rem;color:var(--muted)}
+.empty{border:1px dashed var(--line);border-radius:12px;padding:20px;text-align:center;color:var(--muted)}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.row{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .name{font-weight:500;overflow-wrap:anywhere}
+.row .amt{font-size:.85rem;text-align:right;white-space:nowrap}
+.section-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;font-weight:500}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button.small{padding:5px 10px;font-size:.82rem}
+button.danger{color:var(--err);border-color:var(--err)}
+button:disabled{opacity:.55;cursor:progress}
+.admin{border:2px solid var(--accent);border-radius:16px;padding:20px;display:grid;gap:22px;background:var(--surface)}
+.admin-badge{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+.form{display:grid;gap:12px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.field{display:grid;gap:4px;min-width:0}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.status{border-radius:10px;padding:10px 14px;font-size:.9rem;background:var(--ok-soft);color:var(--ok)}
+.status.warn{background:var(--mid-soft);color:var(--mid)}
+.status.err{background:var(--err-soft);color:var(--err)}
+.admin-list{list-style:none;margin:0;padding:0;display:grid;border:1px solid var(--line);border-radius:12px;max-height:420px;overflow:auto}
+.admin-list li{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.admin-list li:last-child{border-bottom:0}
+.admin-list .meta{font-size:.82rem;color:var(--muted)}
+.admin-list .main{min-width:0;display:grid;overflow-wrap:anywhere}
+footer{font-size:.8rem;color:var(--muted);text-align:center}
+@media (max-width:520px){.summary{grid-template-columns:1fr}.figures{grid-template-columns:1fr 1fr}.row{grid-template-columns:minmax(0,1fr) auto}.row .bar{grid-column:1/-1;grid-row:2}}
+@media (prefers-reduced-motion:no-preference){.bar>i{transition:width .4s ease}}
+</style>
+<script type="application/json" id="dtc-data">{"objectif":120000,"leaders":[],"versements":[]}</script>
+<div id="root"></div>
+<script data-keep id="app">
+(function(){
+  var DEFAULT = {objectif:120000, leaders:[], versements:[]};
+  var state;
+  try { state = JSON.parse(document.getElementById('dtc-data').textContent); } catch(e){ state = DEFAULT; }
+  state.objectif = state.objectif || 120000; state.leaders = state.leaders || []; state.versements = state.versements || [];
+
+  var EVENT = new Date(2027,0,14);
+  var MODES = ['Espèces','Wave','Orange Money','MTN MoMo','Moov Money','Virement bancaire'];
+  var nf = new Intl.NumberFormat('fr-FR');
+  function fcfa(n){ return nf.format(n) + ' FCFA'; }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function norm(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim(); }
+  function uid(){ return Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-4); }
+  function today(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function fdate(iso){ var p=iso.split('-').map(Number); return new Date(p[0],p[1]-1,p[2]).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}); }
+  function byName(a,b){ return a.nom.localeCompare(b.nom,'fr'); }
+  function leaderName(id){ var l=state.leaders.find(function(x){return x.id===id;}); return l ? l.nom : 'Leader supprimé'; }
+
+  function stats(l){
+    var vs = state.versements.filter(function(v){return v.leaderId===l.id;}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
+    var paye = vs.reduce(function(s,v){return s+v.montant;},0);
+    var reste = Math.max(0, state.objectif - paye);
+    var pct = Math.min(100, Math.round(paye/state.objectif*100));
+    var statut = paye>=state.objectif ? 'solde' : paye>0 ? 'cours' : 'zero';
+    return {vs:vs, paye:paye, reste:reste, pct:pct, statut:statut};
+  }
+  var LABEL = {solde:'Soldé', cours:'En cours', zero:'Aucun versement'};
+
+  var admin=false, api=null, busy=false, confirmKey=null, editId=null;
+  var root = document.getElementById('root');
+
+  /* ---------- frame (rendered once) ---------- */
+  var days = Math.ceil((EVENT - new Date(new Date().toDateString()))/86400000);
+  var cd = days>0 ? '<span class="countdown">J-<b class="num">'+days+'</b></span>' : days>-4 ? '<span class="countdown"><b>C’est maintenant !</b></span>' : '';
+  root.innerHTML =
+    '<div class="wrap">'+
+      '<header>'+
+        '<span class="eyebrow">Programme-DTC</span>'+
+        '<h1>Cotisations pour la convention de Yamoussoukro</h1>'+
+        '<div class="event"><span>Du 14 au 17 janvier 2027</span>'+cd+'<span>Participation : <b class="num">'+fcfa(state.objectif)+'</b> par leader</span></div>'+
+      '</header>'+
+      '<div id="status" hidden></div>'+
+      '<div class="summary" id="summary"></div>'+
+      '<section class="lookup" aria-labelledby="t-lookup">'+
+        '<h2 id="t-lookup">Vérifier ma cotisation</h2>'+
+        '<div class="field"><label for="q">Tapez votre nom</label>'+
+        '<input id="q" class="search" type="search" autocomplete="off" placeholder="Ex. : Kouassi Aya"></div>'+
+        '<div id="results" class="cards" aria-live="polite"></div>'+
+      '</section>'+
+      '<section aria-labelledby="t-all">'+
+        '<div class="section-head"><h2 id="t-all">Tous les leaders</h2><span class="hint" id="all-count"></span></div>'+
+        '<div id="all"></div>'+
+      '</section>'+
+      '<div id="admin"></div>'+
+      '<footer>Les montants sont mis à jour par l’organisateur à chaque versement reçu.</footer>'+
+    '</div>';
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  function setStatus(msg, kind){
+    var el=$('status'); if(!msg){ el.hidden=true; return; }
+    el.className='status'+(kind?' '+kind:''); el.textContent=msg; el.hidden=false;
+  }
+
+  function cardHTML(l){
+    var s=stats(l);
+    var hist = s.vs.length ? '<ul class="hist">'+s.vs.map(function(v){
+        return '<li><span>'+esc(fdate(v.date))+' <span class="muted">· '+esc(v.mode)+(v.note?' · '+esc(v.note):'')+'</span></span><b class="num">'+fcfa(v.montant)+'</b></li>';
+      }).join('')+'</ul>' : '<p class="hint">Aucun versement enregistré pour le moment.</p>';
+    return '<article class="card">'+
+      '<div class="card-head"><h3>'+esc(l.nom)+'</h3><span class="pill '+s.statut+'">'+LABEL[s.statut]+'</span></div>'+
+      '<div class="bar big" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+s.pct+'" aria-label="Progression"><i style="width:'+s.pct+'%"></i></div>'+
+      '<div class="figures num">'+
+        '<div><span class="k">Déjà versé</span><span class="v">'+fcfa(s.paye)+'</span></div>'+
+        '<div><span class="k">Reste à payer</span><span class="v">'+fcfa(s.reste)+'</span></div>'+
+        '<div><span class="k">Progression</span><span class="v">'+s.pct+'&nbsp;%</span></div>'+
+      '</div>'+
+      '<div><h3 style="font-size:.85rem;margin-bottom:6px" class="muted">Historique des versements</h3>'+hist+'</div>'+
+    '</article>';
+  }
+
+  function renderSummary(){
+    var n=state.leaders.length, total=0, soldes=0;
+    state.leaders.forEach(function(l){ var s=stats(l); total+=Math.min(s.paye,state.objectif); if(s.statut==='solde') soldes++; });
+    var collecte = state.versements.filter(function(v){return state.leaders.some(function(l){return l.id===v.leaderId;});}).reduce(function(s,v){return s+v.montant;},0);
+    var objectif = n*state.objectif, pct = objectif ? Math.min(100,Math.round(total/objectif*100)) : 0;
+    $('summary').innerHTML =
+      '<div class="tile"><span class="k">Total collecté</span><span class="v num">'+fcfa(collecte)+'</span><span class="s num">sur '+fcfa(objectif)+' attendus</span><div class="bar" style="margin-top:6px"><i style="width:'+pct+'%"></i></div></div>'+
+      '<div class="tile"><span class="k">Leaders soldés</span><span class="v num">'+soldes+' / '+n+'</span><span class="s">ont versé les '+fcfa(state.objectif)+'</span></div>'+
+      '<div class="tile"><span class="k">Reste à collecter</span><span class="v num">'+fcfa(Math.max(0,objectif-total))+'</span><span class="s">avant le 14 janvier 2027</span></div>';
+  }
+
+  function renderResults(){
+    var q=norm($('q').value), el=$('results');
+    if(!state.leaders.length){ el.innerHTML='<p class="hint">La liste des leaders n’a pas encore été remplie.</p>'; return; }
+    if(q.length<2){ el.innerHTML='<p class="hint">Saisissez au moins deux lettres de votre nom pour voir vos versements.</p>'; return; }
+    var words=q.split(' ');
+    var found=state.leaders.filter(function(l){ var n=norm(l.nom); return words.every(function(w){return n.indexOf(w)>=0;}); }).sort(byName);
+    el.innerHTML = found.length ? found.slice(0,6).map(cardHTML).join('') + (found.length>6?'<p class="hint">'+(found.length-6)+' autres résultats : précisez votre nom.</p>':'')
+      : '<div class="empty">Aucun leader ne correspond à « '+esc($('q').value.trim())+' ». Vérifiez l’orthographe ou contactez l’organisateur.</div>';
+  }
+
+  function renderAll(){
+    var ls=state.leaders.slice().sort(byName);
+    $('all-count').textContent = ls.length ? ls.length+' inscrit'+(ls.length>1?'s':'') : '';
+    if(!ls.length){ $('all').innerHTML='<div class="empty">Aucun leader inscrit pour le moment. Les noms apparaîtront ici dès que l’organisateur les aura ajoutés.</div>'; return; }
+    $('all').innerHTML='<div class="list">'+ls.map(function(l){ var s=stats(l);
+      return '<div class="row"><span class="name">'+esc(l.nom)+'</span>'+
+        '<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+s.pct+'" aria-label="Progression de '+esc(l.nom)+'"><i style="width:'+s.pct+'%"></i></div>'+
+        '<span class="amt num">'+(s.statut==='solde'?'<span class="pill solde">Soldé</span>':fcfa(s.paye)+' <span class="muted">· reste '+fcfa(s.reste)+'</span>')+'</span></div>';
+    }).join('')+'</div>';
+  }
+
+  /* ---------- organiser panel ---------- */
+  function renderAdmin(){
+    var el=$('admin');
+    if(!admin){ el.innerHTML=''; return; }
+    var opts = state.leaders.slice().sort(byName).map(function(l){ return '<option value="'+esc(l.id)+'">'+esc(l.nom)+'</option>'; }).join('');
+    el.innerHTML =
+      '<section class="admin" aria-labelledby="t-admin">'+
+        '<div class="section-head"><h2 id="t-admin">Espace organisateur</h2><span class="admin-badge">Visible par vous seul</span></div>'+
+        '<form class="form" id="f-pay" novalidate>'+
+          '<h3>Enregistrer un versement</h3>'+
+          (state.leaders.length ? '' : '<p class="hint">Ajoutez d’abord un leader ci-dessous.</p>')+
+          '<div class="grid2">'+
+            '<div class="field"><label for="p-leader">Leader</label><select id="p-leader" required><option value="">Choisir…</option>'+opts+'</select></div>'+
+            '<div class="field"><label for="p-montant">Montant (FCFA)</label><input id="p-montant" type="number" inputmode="numeric" min="1" step="1" placeholder="10000" required></div>'+
+            '<div class="field"><label for="p-date">Date</label><input id="p-date" type="date" value="'+today()+'" required></div>'+
+            '<div class="field"><label for="p-mode">Moyen de paiement</label><select id="p-mode">'+MODES.map(function(m){return '<option>'+m+'</option>';}).join('')+'</select></div>'+
+          '</div>'+
+          '<div class="field"><label for="p-note">Note (facultatif)</label><input id="p-note" type="text" maxlength="80" placeholder="Ex. : réf. transaction"></div>'+
+          '<p class="hint" id="p-hint"></p>'+
+          '<div class="actions"><button class="primary" type="submit" id="p-submit">Enregistrer le versement</button></div>'+
+        '</form>'+
+        '<form class="form" id="f-leader" novalidate>'+
+          '<h3>Ajouter un leader</h3>'+
+          '<div class="actions" style="flex-wrap:nowrap"><input id="l-nom" type="text" maxlength="60" placeholder="Nom et prénom" aria-label="Nom et prénom du leader"><button type="submit" class="primary" id="l-submit" style="white-space:nowrap">Ajouter</button></div>'+
+        '</form>'+
+        '<div class="form"><h3>Derniers versements</h3><ul class="admin-list" id="a-pays"></ul></div>'+
+        '<div class="form"><h3>Leaders inscrits</h3><ul class="admin-list" id="a-leaders"></ul></div>'+
+      '</section>';
+    renderAdminLists();
+  }
+
+  function renderAdminLists(){
+    var pays=state.versements.slice().sort(function(a,b){return (b.date+b.id)<(a.date+a.id)?-1:1;});
+    $('a-pays').innerHTML = pays.length ? pays.map(function(v){
+      var k='v:'+v.id;
+      return '<li><div class="main"><b class="num">'+fcfa(v.montant)+' · '+esc(leaderName(v.leaderId))+'</b><span class="meta">'+esc(fdate(v.date))+' · '+esc(v.mode)+(v.note?' · '+esc(v.note):'')+'</span></div>'+
+        (confirmKey===k ? '<div class="actions"><span class="meta">Supprimer ce versement ?</span><button class="small danger" data-act="del-pay" data-id="'+esc(v.id)+'">Oui, supprimer</button><button class="small" data-act="cancel">Annuler</button></div>'
+          : '<button class="small" data-act="ask" data-key="'+k+'">Supprimer</button>')+'</li>';
+    }).join('') : '<li class="meta">Aucun versement saisi pour le moment.</li>';
+
+    $('a-leaders').innerHTML = state.leaders.length ? state.leaders.slice().sort(byName).map(function(l){
+      var s=stats(l), k='l:'+l.id;
+      if(editId===l.id) return '<li><input id="e-nom" type="text" maxlength="60" value="'+esc(l.nom)+'" aria-label="Nouveau nom"><div class="actions"><button class="small primary" data-act="save-name" data-id="'+esc(l.id)+'">Enregistrer</button><button class="small" data-act="cancel">Annuler</button></div></li>';
+      return '<li><div class="main"><b>'+esc(l.nom)+'</b><span class="meta num">'+fcfa(s.paye)+' versés · '+s.vs.length+' versement'+(s.vs.length>1?'s':'')+'</span></div>'+
+        (confirmKey===k ? '<div class="actions"><span class="meta">Supprimer ce leader'+(s.vs.length?' et ses '+s.vs.length+' versement'+(s.vs.length>1?'s':''):'')+' ?</span><button class="small danger" data-act="del-leader" data-id="'+esc(l.id)+'">Oui, supprimer</button><button class="small" data-act="cancel">Annuler</button></div>'
+          : '<div class="actions"><button class="small" data-act="edit" data-id="'+esc(l.id)+'">Renommer</button><button class="small" data-act="ask" data-key="'+k+'">Supprimer</button></div>')+'</li>';
+    }).join('') : '<li class="meta">Aucun leader. Ajoutez le premier avec le formulaire ci-dessus.</li>';
+  }
+
+  function payHint(){
+    var id=$('p-leader').value, m=parseInt($('p-montant').value,10), h=$('p-hint');
+    if(!id){ h.textContent=''; return; }
+    var l=state.leaders.find(function(x){return x.id===id;}), s=stats(l);
+    var txt='Déjà versé : '+fcfa(s.paye)+' · reste : '+fcfa(s.reste)+'.';
+    if(m>0 && m>s.reste) txt+=' Attention : ce montant dépasse le reste à payer de '+fcfa(m-s.reste)+'.';
+    h.textContent=txt;
+  }
+
+  /* ---------- saving: the page republishes itself with the new data ---------- */
+  var FALLBACK_RESET=':root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}';
+  function buildDoc(next){
+    var hs=document.head.querySelector('style'); var reset=hs?hs.textContent:FALLBACK_RESET;
+    var keep=function(sel){ var e=document.querySelector(sel); return e?e.outerHTML:''; };
+    var links=Array.prototype.map.call(document.querySelectorAll('link[data-keep]'),function(e){return e.outerHTML;}).join('\n');
+    var data=JSON.stringify(next).replace(/</g,'\\u003c');
+    return '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>'+reset+'</style></head><body>'+
+      keep('title[data-keep]')+'\n'+keep('meta[data-keep]')+'\n'+links+'\n'+keep('#app-style')+'\n'+
+      '<script type="application/json" id="dtc-data">'+data+'<\/script>\n<div id="root"></div>\n'+keep('#app')+'</body></html>';
+  }
+
+  function setBusy(b){ busy=b; Array.prototype.forEach.call(document.querySelectorAll('#admin button'),function(x){x.disabled=b;}); }
+
+  function commit(mutate, message){
+    if(busy||!api) return;
+    var next=JSON.parse(JSON.stringify(state)); mutate(next);
+    setBusy(true); setStatus('Enregistrement en cours…','warn');
+    try{ sessionStorage.setItem('dtc-flash', message); }catch(e){}
+    api.publish(buildDoc(next)).then(function(){
+      setStatus(message+' La page se met à jour…');
+    },function(err){
+      try{ sessionStorage.removeItem('dtc-flash'); }catch(e){}
+      setBusy(false);
+      var c=err&&err.code;
+      if(c==='conflict') setStatus('Une autre mise à jour vient d’être publiée. La page se recharge : vérifiez puis refaites votre saisie si elle n’apparaît pas.','warn');
+      else if(c==='rate_limited') setStatus('Trop d’enregistrements rapprochés. Attendez quelques secondes puis réessayez.','warn');
+      else if(['not_writer','not_granted','consent_required','capability_disabled','capability_removed','not_declared'].indexOf(c)>=0){ admin=false; renderAdmin(); setStatus('Cette page est en lecture seule pour vous : la saisie n’est pas possible ici.','warn'); }
+      else setStatus('L’enregistrement a échoué. Vérifiez votre connexion et réessayez.','err');
+    });
+  }
+
+  root.addEventListener('input',function(e){
+    if(e.target.id==='q') renderResults();
+    if(e.target.id==='p-montant') payHint();
+  });
+  root.addEventListener('change',function(e){ if(e.target.id==='p-leader') payHint(); });
+
+  root.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(e.target.id==='f-pay'){
+      var id=$('p-leader').value, m=parseInt($('p-montant').value,10), d=$('p-date').value, mode=$('p-mode').value, note=$('p-note').value.trim();
+      if(!id){ setStatus('Choisissez le leader qui a fait le versement.','err'); $('p-leader').focus(); return; }
+      if(!(m>0)){ setStatus('Indiquez un montant en FCFA supérieur à 0.','err'); $('p-montant').focus(); return; }
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){ setStatus('Indiquez la date du versement.','err'); $('p-date').focus(); return; }
+      commit(function(n){ n.versements.push({id:uid(), leaderId:id, montant:m, date:d, mode:mode, note:note}); },
+        'Versement de '+fcfa(m)+' enregistré pour '+leaderName(id)+'.');
+    }
+    if(e.target.id==='f-leader'){
+      var nom=$('l-nom').value.replace(/\s+/g,' ').trim();
+      if(!nom){ setStatus('Saisissez le nom du leader.','err'); $('l-nom').focus(); return; }
+      if(state.leaders.some(function(l){return norm(l.nom)===norm(nom);})){ setStatus('« '+nom+' » est déjà dans la liste.','err'); return; }
+      commit(function(n){ n.leaders.push({id:uid(), nom:nom}); }, nom+' a été ajouté(e) à la liste.');
+    }
+  });
+
+  root.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-act]'); if(!b||busy) return;
+    var act=b.getAttribute('data-act'), id=b.getAttribute('data-id');
+    if(act==='ask'){ confirmKey=b.getAttribute('data-key'); editId=null; renderAdminLists(); }
+    else if(act==='cancel'){ confirmKey=null; editId=null; renderAdminLists(); }
+    else if(act==='edit'){ editId=id; confirmKey=null; renderAdminLists(); var i=$('e-nom'); if(i){ i.focus(); i.select(); } }
+    else if(act==='save-name'){
+      var nom=$('e-nom').value.replace(/\s+/g,' ').trim(); if(!nom){ setStatus('Le nom ne peut pas être vide.','err'); return; }
+      commit(function(n){ n.leaders.forEach(function(l){ if(l.id===id) l.nom=nom; }); }, 'Nom modifié : '+nom+'.');
+    }
+    else if(act==='del-pay'){
+      var v=state.versements.find(function(x){return x.id===id;});
+      commit(function(n){ n.versements=n.versements.filter(function(x){return x.id!==id;}); }, 'Versement de '+fcfa(v?v.montant:0)+' supprimé.');
+    }
+    else if(act==='del-leader'){
+      var nm=leaderName(id);
+      commit(function(n){ n.leaders=n.leaders.filter(function(x){return x.id!==id;}); n.versements=n.versements.filter(function(x){return x.leaderId!==id;}); }, nm+' a été retiré(e) de la liste.');
+    }
+  });
+
+  renderSummary(); renderResults(); renderAll();
+  try{ var f=sessionStorage.getItem('dtc-flash'); if(f){ setStatus(f); sessionStorage.removeItem('dtc-flash'); } }catch(e){}
+
+  /* Organiser mode: only for people who can edit this page. */
+  if(window.claude && typeof window.claude.use==='function'){
+    Promise.all([window.claude.use('user'), window.claude.use('artifact')]).then(function(r){
+      var u=r[0], a=r[1];
+      if(!u||!a) return null;
+      api=a;
+      return u.canEdit();
+    }).then(function(ok){ if(ok){ admin=true; renderAdmin(); } }).catch(function(){});
+  }
+})();
+</script>
